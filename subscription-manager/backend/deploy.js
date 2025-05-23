@@ -29,19 +29,15 @@ async function deploy() {
 
     // Database setup based on environment
     if (process.env.RAILWAY_ENVIRONMENT) {
-      console.log('🗄️  Running Railway database migrations...');
+      console.log('🗄️  Setting up Railway PostgreSQL database...');
       try {
-        // Try migrate deploy first (for existing databases)
-        execSync('npx prisma migrate deploy', { stdio: 'inherit' });
-      } catch (migrateError) {
-        console.log('📊 No existing migrations found, creating database...');
-        try {
-          // If no migrations exist, push schema directly
-          execSync('npx prisma db push', { stdio: 'inherit' });
-        } catch (pushError) {
-          console.error('❌ Database setup failed:', pushError.message);
-          throw pushError;
-        }
+        // For Railway PostgreSQL, use db push to avoid migration conflicts
+        console.log('📊 Pushing schema to PostgreSQL database...');
+        execSync('npx prisma db push --force-reset', { stdio: 'inherit' });
+        console.log('✅ Database schema synchronized');
+      } catch (pushError) {
+        console.error('❌ Database setup failed:', pushError.message);
+        throw pushError;
       }
     } else {
       console.log('🗄️  Running local database migrations...');
