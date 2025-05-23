@@ -11,6 +11,7 @@
     "build": "npx prisma generate",
     "postinstall": "npx prisma generate",
     "deploy": "node deploy.js",
+    "seed:production": "node production-seed.js",
     "test": "echo \"Error: no test specified\" && exit 1",
     "test:health": "node test-health.js",
     "test:health:simple": "node test-health-simple.js"

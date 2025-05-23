@@ -44,6 +44,19 @@ async function deploy() {
       execSync('npx prisma migrate deploy', { stdio: 'inherit' });
     }
 
+    // Run production seeding if in Railway
+    if (process.env.RAILWAY_ENVIRONMENT) {
+      console.log('🌱 Running production seeding...');
+      try {
+        const seedProduction = require('./production-seed.js');
+        await seedProduction();
+        console.log('✅ Production seeding completed');
+      } catch (seedError) {
+        console.warn('⚠️  Production seeding failed:', seedError.message);
+        console.warn('⚠️  Continuing with server startup...');
+      }
+    }
+
     // Start the server
     console.log('✅ Starting server...');
     require('./src/server.js');
