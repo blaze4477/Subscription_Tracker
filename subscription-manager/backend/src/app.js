@@ -44,11 +44,15 @@ const corsOptions = {
       'http://127.0.0.1:3001',
       'http://127.0.0.1:3002',
       'http://127.0.0.1:3003',
+      // Vercel deployments
       'https://subscription-tracker-rbat.vercel.app',
       'https://subscription-tracker-lake.vercel.app',
       'https://subscription-tracker-git-main-thinesh-balans-projects.vercel.app',
       'https://subscription-tracker-hixfcstx0-thinesh-balans-projects.vercel.app',
-      'https://apps.thineshbalan.com'
+      'https://subscription-tracker-6f5qul8pb-thinesh-balans-projects.vercel.app',
+      // Custom domains
+      'https://apps.thineshbalan.com',
+      'https://subscription-tracker.thineshbalan.com'
     ];
 
     // Check if origin is allowed
