@@ -3,6 +3,8 @@ const { PrismaClient } = require('@prisma/client');
 const { hashPassword, comparePassword, validatePassword } = require('../lib/password');
 const { generateTokenPair } = require('../lib/jwt');
 const { auth } = require('../middleware/auth');
+const { authLimiter, registrationLimiter } = require('../middleware/rateLimiter');
+const logger = require('../lib/logger');
 
 const router = express.Router();
 const prisma = new PrismaClient();
@@ -73,7 +75,7 @@ const validateInput = (data, requiredFields = []) => {
 /**
  * POST /register - Register a new user
  */
-router.post('/register', async (req, res) => {
+router.post('/register', registrationLimiter, async (req, res) => {
   try {
     const { email, password, name } = req.body;
 
@@ -138,6 +140,12 @@ router.post('/register', async (req, res) => {
     // Generate JWT tokens
     const tokens = generateTokenPair(user.id);
 
+    // Track successful registration
+    logger.trackAuthEvent('register', user.id, true, {
+      email: user.email,
+      hasName: !!user.name
+    });
+
     // Return success response
     res.status(201).json({
       message: 'User registered successfully',
@@ -146,6 +154,9 @@ router.post('/register', async (req, res) => {
     });
 
   } catch (error) {
+    logger.trackAuthEvent('register', req.body?.email || 'unknown', false, {
+      error: error.message
+    });
     console.error('Registration error:', error);
 
     // Handle Prisma unique constraint violations
@@ -183,7 +194,7 @@ router.post('/register', async (req, res) => {
 /**
  * POST /login - Authenticate user and return token
  */
-router.post('/login', async (req, res) => {
+router.post('/login', authLimiter, async (req, res) => {
   try {
     const { email, password } = req.body;
 
@@ -209,6 +220,9 @@ router.post('/login', async (req, res) => {
     });
 
     if (!user) {
+      logger.trackAuthEvent('login', sanitizedData.email, false, {
+        reason: 'user_not_found'
+      });
       return res.status(401).json({
         error: 'Invalid credentials',
         message: 'Email or password is incorrect'
@@ -219,6 +233,10 @@ router.post('/login', async (req, res) => {
     const isPasswordValid = await comparePassword(sanitizedData.password, user.password);
 
     if (!isPasswordValid) {
+      logger.trackAuthEvent('login', user.id, false, {
+        email: user.email,
+        reason: 'invalid_password'
+      });
       return res.status(401).json({
         error: 'Invalid credentials',
         message: 'Email or password is incorrect'
@@ -227,6 +245,11 @@ router.post('/login', async (req, res) => {
 
     // Generate JWT tokens
     const tokens = generateTokenPair(user.id);
+
+    // Track successful login
+    logger.trackAuthEvent('login', user.id, true, {
+      email: user.email
+    });
 
     // Return user data (without password) and tokens
     const { password: _, ...userWithoutPassword } = user;
@@ -238,6 +261,9 @@ router.post('/login', async (req, res) => {
     });
 
   } catch (error) {
+    logger.trackAuthEvent('login', req.body?.email || 'unknown', false, {
+      error: error.message
+    });
     console.error('Login error:', error);
 
     // Handle database errors
@@ -325,7 +351,7 @@ router.get('/me', auth, async (req, res) => {
 /**
  * POST /refresh - Refresh access token using refresh token
  */
-router.post('/refresh', async (req, res) => {
+router.post('/refresh', authLimiter, async (req, res) => {
   try {
     const { refreshToken } = req.body;
 

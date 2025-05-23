@@ -1,12 +1,16 @@
 const express = require('express');
 const { PrismaClient } = require('@prisma/client');
 const { auth } = require('../middleware/auth');
+const { apiLimiter } = require('../middleware/rateLimiter');
 
 const router = express.Router();
 const prisma = new PrismaClient();
 
 // Apply authentication middleware to all routes
 router.use(auth);
+
+// Apply API rate limiting to all subscription routes
+router.use(apiLimiter);
 
 /**
  * Validate subscription input data

@@ -10,6 +10,7 @@ import SubscriptionStats from '@/components/SubscriptionStats';
 import AddSubscriptionModal from '@/components/AddSubscriptionModal';
 import EditSubscriptionModal from '@/components/EditSubscriptionModal';
 import { useToast } from '@/components/SuccessToast';
+import FeedbackButton from '@/components/FeedbackButton';
 
 export default function DashboardPage() {
   const router = useRouter();
@@ -402,6 +403,9 @@ export default function DashboardPage() {
 
       {/* Toast Notifications */}
       <ToastComponent />
+
+      {/* Feedback Button */}
+      <FeedbackButton userEmail={user?.email} />
     </div>
   );
 }

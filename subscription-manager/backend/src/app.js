@@ -8,6 +8,10 @@ require('dotenv').config();
 const authRoutes = require('./routes/auth');
 const subscriptionRoutes = require('./routes/subscriptions');
 
+// Import logging middleware
+const { requestLogger, errorLogger } = require('./middleware/logging');
+const logger = require('./lib/logger');
+
 // Create Express application
 const app = express();
 
@@ -90,6 +94,9 @@ app.use(morgan(morganFormat, {
     return process.env.NODE_ENV === 'production' && req.url === '/health';
   }
 }));
+
+// Add request logging middleware
+app.use(requestLogger);
 
 // Body parsing middleware
 app.use(express.json({ 
@@ -196,18 +203,23 @@ app.use('*', (req, res) => {
   });
 });
 
+// Error logging middleware - must be before error handler
+app.use(errorLogger);
+
 // Global error handling middleware - must be last
 app.use((err, req, res, next) => {
-  // Log error for debugging
-  console.error('Global error handler:', {
-    error: err.message,
-    stack: process.env.NODE_ENV === 'development' ? err.stack : undefined,
-    url: req.url,
-    method: req.method,
-    ip: req.ip,
-    userAgent: req.get('User-Agent'),
-    timestamp: new Date().toISOString()
-  });
+  // Log error for debugging (already logged by errorLogger, but keeping console for dev)
+  if (process.env.NODE_ENV === 'development') {
+    console.error('Global error handler:', {
+      error: err.message,
+      stack: err.stack,
+      url: req.url,
+      method: req.method,
+      ip: req.ip,
+      userAgent: req.get('User-Agent'),
+      timestamp: new Date().toISOString()
+    });
+  }
 
   // Handle CORS errors
   if (err.message.includes('CORS')) {
