@@ -255,7 +255,7 @@ export default function DashboardPage() {
             Welcome back{user.name ? `, ${user.name}` : ''}!
           </h2>
           <p className="text-secondary-600">
-            Here's an overview of your subscription management dashboard.
+            Here&apos;s an overview of your subscription management dashboard.
           </p>
         </div>
 

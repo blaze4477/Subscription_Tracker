@@ -160,7 +160,7 @@ export const useAuthStore = create<AuthState>((set, get) => ({
         await authApi.refreshToken();
         await get().getCurrentUser();
         console.log('✅ Auth: Token refreshed successfully');
-      } catch (refreshError) {
+      } catch {
         console.log('❌ Auth: Refresh failed, clearing state');
         // Refresh failed, clear auth state
         set({

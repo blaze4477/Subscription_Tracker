@@ -206,7 +206,7 @@ export const authApi = {
 };
 
 // Health check
-export const healthCheck = async (): Promise<any> => {
+export const healthCheck = async (): Promise<{ status: string; timestamp: string; port: number; env: string; uptime: number }> => {
   return apiRequest('/health', { method: 'GET' }, false);
 };
 

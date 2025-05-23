@@ -94,7 +94,9 @@ export interface CreateSubscriptionData {
   autoRenewal?: boolean;
 }
 
-export interface UpdateSubscriptionData extends Partial<CreateSubscriptionData> {}
+export interface UpdateSubscriptionData extends Partial<CreateSubscriptionData> {
+  id?: string;
+}
 
 // Create headers with authentication
 const createHeaders = (): HeadersInit => {
