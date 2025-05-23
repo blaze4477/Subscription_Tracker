@@ -429,6 +429,87 @@ router.post('/refresh', authLimiter, async (req, res) => {
 });
 
 /**
+ * PUT /change-password - Change user password
+ */
+router.put('/change-password', auth, async (req, res) => {
+  try {
+    const userId = req.user.id;
+    const { currentPassword, newPassword } = req.body;
+
+    // Validate input
+    if (!currentPassword || !newPassword) {
+      return res.status(400).json({
+        error: 'Validation failed',
+        message: 'Current password and new password are required'
+      });
+    }
+
+    // Validate new password strength
+    const passwordValidation = validatePassword(newPassword);
+    if (!passwordValidation.isValid) {
+      return res.status(400).json({
+        error: 'Password validation failed',
+        message: 'New password does not meet security requirements',
+        details: passwordValidation.errors
+      });
+    }
+
+    // Get user with password
+    const user = await prisma.user.findUnique({
+      where: { id: userId }
+    });
+
+    if (!user) {
+      return res.status(404).json({
+        error: 'User not found',
+        message: 'User account no longer exists'
+      });
+    }
+
+    // Verify current password
+    const isPasswordValid = await comparePassword(currentPassword, user.password);
+    if (!isPasswordValid) {
+      logger.trackAuthEvent('change_password', userId, false, {
+        reason: 'invalid_current_password'
+      });
+      return res.status(401).json({
+        error: 'Invalid password',
+        message: 'Current password is incorrect'
+      });
+    }
+
+    // Hash new password
+    const hashedPassword = await hashPassword(newPassword);
+
+    // Update password in database
+    await prisma.user.update({
+      where: { id: userId },
+      data: { password: hashedPassword }
+    });
+
+    // Track successful password change
+    logger.trackAuthEvent('change_password', userId, true, {
+      email: user.email
+    });
+
+    res.json({
+      message: 'Password changed successfully'
+    });
+
+  } catch (error) {
+    logger.trackAuthEvent('change_password', req.user?.id || 'unknown', false, {
+      error: error.message
+    });
+    console.error('Change password error:', error);
+
+    res.status(500).json({
+      error: 'Internal server error',
+      message: 'Unable to change password at this time'
+    });
+  }
+});
+
+/**
  * POST /logout - Logout user (client-side token removal)
  */
 router.post('/logout', auth, async (req, res) => {

@@ -4,13 +4,14 @@ import { useEffect, useState, useMemo } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAuthStore } from '@/store/authStore';
 import { subscriptionApi, type Subscription, type AnalyticsData } from '@/lib/subscriptionAPI';
-import { LogOut, User, CreditCard, Plus, Search, Filter } from 'lucide-react';
+import { CreditCard, Plus, Search, Filter } from 'lucide-react';
 import SubscriptionCard from '@/components/SubscriptionCard';
 import SubscriptionStats from '@/components/SubscriptionStats';
 import AddSubscriptionModal from '@/components/AddSubscriptionModal';
 import EditSubscriptionModal from '@/components/EditSubscriptionModal';
 import { useToast } from '@/components/SuccessToast';
 import FeedbackButton from '@/components/FeedbackButton';
+import UserDropdown from '@/components/UserDropdown';
 
 export default function DashboardPage() {
   const router = useRouter();
@@ -228,22 +229,7 @@ export default function DashboardPage() {
             </div>
 
             {/* User Menu */}
-            <div className="flex items-center space-x-4">
-              <div className="flex items-center text-secondary-700">
-                <User className="h-5 w-5 mr-2" />
-                <span className="text-sm font-medium">
-                  {user.name || user.email}
-                </span>
-              </div>
-              
-              <button
-                onClick={handleLogout}
-                className="flex items-center text-secondary-600 hover:text-secondary-900 px-3 py-2 rounded-md text-sm font-medium transition-colors duration-200"
-              >
-                <LogOut className="h-4 w-4 mr-1" />
-                Sign Out
-              </button>
-            </div>
+            <UserDropdown user={user} onLogout={handleLogout} />
           </div>
         </div>
       </header>

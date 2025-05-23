@@ -170,6 +170,14 @@ export const authApi = {
     return apiRequest<{ message: string; user: User }>('/auth/me');
   },
 
+  // Change password
+  changePassword: async (currentPassword: string, newPassword: string): Promise<{ message: string }> => {
+    return apiRequest<{ message: string }>('/auth/change-password', {
+      method: 'PUT',
+      body: JSON.stringify({ currentPassword, newPassword }),
+    });
+  },
+
   // Logout user
   logout: async (): Promise<{ message: string }> => {
     try {

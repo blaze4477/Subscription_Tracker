@@ -126,7 +126,7 @@ export default function HomePage() {
             {isRegisterMode && (
               <div>
                 <label htmlFor="name" className="block text-sm font-medium text-secondary-700 mb-2">
-                  Full Name (Optional)
+                  Name (Optional)
                 </label>
                 <input
                   type="text"
@@ -135,7 +135,7 @@ export default function HomePage() {
                   value={formData.name}
                   onChange={handleInputChange}
                   className="w-full px-3 py-2 border border-gray-300 rounded-md text-gray-900 placeholder-gray-400 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 disabled:bg-gray-50 disabled:text-gray-500"
-                  placeholder="Enter your full name"
+                  placeholder="Enter your name"
                   disabled={isLoading}
                 />
               </div>

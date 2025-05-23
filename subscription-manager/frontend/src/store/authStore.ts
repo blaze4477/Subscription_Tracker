@@ -14,6 +14,7 @@ interface AuthState {
   logout: () => Promise<void>;
   getCurrentUser: () => Promise<void>;
   clearError: () => void;
+  changePassword: (currentPassword: string, newPassword: string) => Promise<{ message: string }>;
   initialize: () => Promise<void>;
 }
 
@@ -119,6 +120,28 @@ export const useAuthStore = create<AuthState>((set, get) => ({
   // Clear error
   clearError: () => {
     set({ error: null });
+  },
+
+  // Change password
+  changePassword: async (currentPassword: string, newPassword: string) => {
+    set({ isLoading: true, error: null });
+
+    try {
+      const response = await authApi.changePassword(currentPassword, newPassword);
+      
+      set({
+        isLoading: false,
+        error: null,
+      });
+
+      return response;
+    } catch (error) {
+      set({
+        isLoading: false,
+        error: error instanceof Error ? error.message : 'Failed to change password',
+      });
+      throw error;
+    }
   },
 
   // Initialize auth state (check for existing token)
