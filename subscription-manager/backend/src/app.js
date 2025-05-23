@@ -43,7 +43,8 @@ const corsOptions = {
       'http://127.0.0.1:3000',
       'http://127.0.0.1:3001',
       'http://127.0.0.1:3002',
-      'http://127.0.0.1:3003'
+      'http://127.0.0.1:3003',
+      'https://subscription-tracker-rbat.vercel.app'
     ];
 
     // Check if origin is allowed
