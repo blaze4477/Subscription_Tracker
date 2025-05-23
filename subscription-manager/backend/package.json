@@ -4,11 +4,13 @@
   "main": "index.js",
   "scripts": {
     "dev": "nodemon src/server.js",
-    "start": "node start.js",
+    "start": "node deploy.js",
     "start:simple": "node src/server.js",
+    "start:emergency": "node start.js",
     "start:debug": "node simple-server.js",
     "build": "npx prisma generate",
     "postinstall": "npx prisma generate",
+    "deploy": "node deploy.js",
     "test": "echo \"Error: no test specified\" && exit 1",
     "test:health": "node test-health.js",
     "test:health:simple": "node test-health-simple.js"
