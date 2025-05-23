@@ -62,7 +62,7 @@ export default function FeedbackModal({ isOpen, onClose, userEmail }: FeedbackMo
         onClose();
       }, 2000);
       
-    } catch (err) {
+    } catch {
       setSubmitStatus('error');
       setError('Failed to send feedback. Please try again.');
     } finally {
