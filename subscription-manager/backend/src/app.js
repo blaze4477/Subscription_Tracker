@@ -45,6 +45,9 @@ const corsOptions = {
       'http://127.0.0.1:3002',
       'http://127.0.0.1:3003',
       'https://subscription-tracker-rbat.vercel.app',
+      'https://subscription-tracker-lake.vercel.app',
+      'https://subscription-tracker-git-main-thinesh-balans-projects.vercel.app',
+      'https://subscription-tracker-hixfcstx0-thinesh-balans-projects.vercel.app',
       'https://apps.thineshbalan.com'
     ];
 
