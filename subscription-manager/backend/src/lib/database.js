@@ -13,13 +13,7 @@ function getDatabaseConfig() {
 
   // Railway PostgreSQL optimizations
   if (isRailway && process.env.DATABASE_URL?.includes('postgresql')) {
-    config.datasources = {
-      db: {
-        url: process.env.DATABASE_URL,
-      },
-    };
-    
-    // PostgreSQL connection pool settings for Railway
+    // Use datasourceUrl for Railway PostgreSQL
     config.datasourceUrl = process.env.DATABASE_URL;
     config.log = ['error', 'warn']; // Reduce logging in production
   }
