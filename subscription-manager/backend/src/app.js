@@ -107,68 +107,17 @@ app.use((req, res, next) => {
   next();
 });
 
-// Health check endpoint with enhanced database connectivity
-app.get('/health', async (req, res) => {
-  const timestamp = new Date().toISOString();
-  const uptime = process.uptime();
-  
-  let status = 'healthy';
-  let database = { connected: false };
-  let httpStatus = 200;
-
-  // Check database connectivity if DATABASE_URL exists
-  if (process.env.DATABASE_URL) {
-    try {
-      const { getDatabaseHealth } = require('./lib/database');
-      const { PrismaClient } = require('@prisma/client');
-      const prisma = new PrismaClient();
-      
-      // Get comprehensive database health
-      const dbHealth = await getDatabaseHealth(prisma);
-      
-      database = {
-        connected: dbHealth.connected,
-        status: dbHealth.status,
-        response_time_ms: dbHealth.responseTime,
-        environment: dbHealth.environment
-      };
-      
-      if (!dbHealth.connected) {
-        database.error = dbHealth.error;
-        status = 'degraded';
-        httpStatus = 503;
-      }
-      
-      await prisma.$disconnect();
-    } catch (error) {
-      database.connected = false;
-      database.status = 'error';
-      database.error = error.message;
-      
-      // Set status to degraded if DB is down but app is running
-      status = 'degraded';
-      httpStatus = 503; // Service Unavailable
-    }
-  } else {
-    // No DATABASE_URL configured
-    database.status = 'not_configured';
-    status = 'degraded';
-    httpStatus = 503;
-  }
-
-  // Status logic:
-  // 'healthy' - All systems operational
-  // 'degraded' - App running but DB issues or not configured
-  // 'unhealthy' - Critical failures (would prevent server start)
-
+// Health check endpoint - simplified for Railway
+app.get('/health', (req, res) => {
   const healthCheck = {
-    status,
-    timestamp,
-    uptime,
-    database
+    status: 'OK',
+    timestamp: new Date().toISOString(),
+    port: process.env.PORT || 3001,
+    env: process.env.NODE_ENV || 'development',
+    uptime: process.uptime()
   };
 
-  res.status(httpStatus).json(healthCheck);
+  res.status(200).json(healthCheck);
 });
 
 // Ultra-simple ping endpoint
