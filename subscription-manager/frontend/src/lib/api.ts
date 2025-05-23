@@ -1,4 +1,16 @@
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'https://subscriptiontracker-production.up.railway.app/api';
+// Ensure API URL is properly formatted
+const getApiBaseUrl = () => {
+  const envUrl = process.env.NEXT_PUBLIC_API_URL;
+  
+  // If no environment variable or it's malformed, use fallback
+  if (!envUrl || !envUrl.startsWith('https://')) {
+    return 'https://subscriptiontracker-production.up.railway.app/api';
+  }
+  
+  return envUrl;
+};
+
+const API_BASE_URL = getApiBaseUrl();
 
 // Debug API URL on load
 console.log('🌐 Auth API Base URL:', API_BASE_URL);
