@@ -10,8 +10,8 @@ export default function HomePage() {
   const { login, register, isLoading, error, clearError, isAuthenticated, initialize } = useAuthStore();
   
   const [formData, setFormData] = useState({
-    email: 'test@example.com', // Pre-fill with test credentials
-    password: 'MySecure2024!Pass',
+    email: '',
+    password: '',
     name: '',
   });
   const [isRegisterMode, setIsRegisterMode] = useState(false);
@@ -88,15 +88,6 @@ export default function HomePage() {
     setFormError('');
   };
 
-  const fillTestCredentials = () => {
-    setFormData({
-      email: 'test@example.com',
-      password: 'MySecure2024!Pass',
-      name: '',
-    });
-    clearError();
-    setFormError('');
-  };
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-primary-50 to-secondary-100 flex items-center justify-center p-4">
@@ -218,23 +209,6 @@ export default function HomePage() {
               </button>
             </p>
           </div>
-
-          {/* Test Credentials Helper */}
-          {!isRegisterMode && (
-            <div className="mt-4 p-3 bg-secondary-50 rounded-lg">
-              <p className="text-sm text-secondary-600 mb-2">
-                Test credentials (click to auto-fill):
-              </p>
-              <button
-                type="button"
-                onClick={fillTestCredentials}
-                className="text-sm bg-secondary-200 hover:bg-secondary-300 text-secondary-700 px-3 py-1 rounded-md transition-colors duration-200"
-                disabled={isLoading}
-              >
-                Use Test Account
-              </button>
-            </div>
-          )}
         </div>
 
         {/* Footer */}
