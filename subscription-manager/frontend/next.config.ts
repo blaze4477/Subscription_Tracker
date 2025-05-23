@@ -1,9 +1,9 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  basePath: '/subscription-tracker',
-  trailingSlash: true,
-  assetPrefix: '/subscription-tracker',
+  // basePath: '/subscription-tracker', // Temporarily disabled due to 404 issues
+  // trailingSlash: true,
+  // assetPrefix: '/subscription-tracker',
   output: 'standalone'
 };
 
