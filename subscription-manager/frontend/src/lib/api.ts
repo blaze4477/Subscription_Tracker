@@ -1,4 +1,4 @@
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001/api';
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'https://subscriptiontracker-production.up.railway.app/api';
 
 // Debug API URL on load
 console.log('🌐 Auth API Base URL:', API_BASE_URL);
