@@ -131,7 +131,7 @@ const subscriptionApiRequest = async <T>(
     console.log('🔍 Making API request to:', url);
     console.log('🔑 Request config:', {
       method: config.method || 'GET',
-      hasAuthHeader: !!config.headers?.Authorization,
+      hasAuthHeader: !!(config.headers as Record<string, string>)?.Authorization,
       origin: window.location.origin
     });
     

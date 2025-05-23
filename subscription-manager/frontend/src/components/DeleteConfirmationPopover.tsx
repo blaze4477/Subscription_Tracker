@@ -8,7 +8,7 @@ interface DeleteConfirmationPopoverProps {
   onClose: () => void;
   onConfirm: () => void;
   itemName: string;
-  triggerRef: React.RefObject<HTMLElement>;
+  triggerRef: React.RefObject<HTMLElement | null>;
 }
 
 export default function DeleteConfirmationPopover({
