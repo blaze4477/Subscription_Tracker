@@ -45,7 +45,7 @@ export default function FeedbackButton({ userEmail }: FeedbackButtonProps) {
         {/* Main Button */}
         <button
           onClick={() => setIsModalOpen(true)}
-          className="group relative bg-primary-600 hover:bg-primary-700 text-white rounded-lg px-5 py-3 shadow-lg hover:shadow-xl transition-all duration-200 transform hover:scale-105"
+          className="group relative bg-purple-600 hover:bg-purple-700 text-white rounded-lg px-5 py-3 shadow-lg hover:shadow-xl transition-all duration-200 transform hover:scale-105"
           aria-label="Send feedback"
         >
           <div className="flex items-center space-x-2">
@@ -54,7 +54,7 @@ export default function FeedbackButton({ userEmail }: FeedbackButtonProps) {
           </div>
 
           {/* Pulse animation */}
-          <span className="absolute inset-0 rounded-lg bg-primary-600 animate-ping opacity-20"></span>
+          <span className="absolute inset-0 rounded-lg bg-purple-600 animate-ping opacity-20"></span>
         </button>
       </div>
 

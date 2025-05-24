@@ -238,12 +238,25 @@ export default function DashboardPage() {
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Welcome Section */}
         <div className="mb-8">
-          <h2 className="text-2xl font-bold text-secondary-900 mb-2">
-            Welcome back{user.name ? `, ${user.name}` : ''}!
-          </h2>
-          <p className="text-secondary-600">
-            Here&apos;s an overview of your subscription management dashboard.
-          </p>
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between">
+            <div className="mb-4 sm:mb-0">
+              <h2 className="text-2xl font-bold text-secondary-900 mb-2">
+                Welcome back{user.name ? `, ${user.name}` : ''}!
+              </h2>
+              <p className="text-secondary-600">
+                Here&apos;s an overview of your subscription management dashboard.
+              </p>
+            </div>
+            
+            {/* Top Add Subscription Button */}
+            <button
+              onClick={handleAddSubscription}
+              className="flex items-center justify-center space-x-2 bg-primary-600 hover:bg-primary-700 text-white px-6 py-3 rounded-lg transition-colors duration-200 shadow-md hover:shadow-lg"
+            >
+              <Plus className="h-5 w-5" />
+              <span className="font-medium">Add Subscription</span>
+            </button>
+          </div>
         </div>
 
         {/* Analytics Stats */}
