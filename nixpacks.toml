@@ -4,7 +4,7 @@ nixPkgs = ["nodejs-18_x", "python3"]
 [phases.install]
 cmds = [
   "cd subscription-manager/backend",
-  "npm install --production=false"
+  "npm install --production=false --ignore-scripts"
 ]
 
 [phases.build]

@@ -10,9 +10,12 @@ WORKDIR /app
 # Copy package files first for better caching
 COPY subscription-manager/backend/package*.json ./subscription-manager/backend/
 
+# Copy prisma schema for generation
+COPY subscription-manager/backend/prisma ./subscription-manager/backend/prisma
+
 # Install dependencies
 WORKDIR /app/subscription-manager/backend
-RUN npm install --production=false && npm list --depth=0
+RUN npm install --production=false
 
 # Copy the rest of the application
 WORKDIR /app
