@@ -1,0 +1,10 @@
+[build]
+builder = "nixpacks"
+buildCommand = "cd subscription-manager/backend && npm install && npx prisma generate"
+
+[deploy]
+startCommand = "cd subscription-manager/backend && npm start"
+healthcheckPath = "/health"
+healthcheckTimeout = 300
+restartPolicyType = "on_failure"
+restartPolicyMaxRetries = 10

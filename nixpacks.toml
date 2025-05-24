@@ -1,11 +1,11 @@
 [phases.setup]
-nixPkgs = ["nodejs", "npm"]
+nixpkgs = ["...", "nodejs"]
 
 [phases.install]
 cmds = ["cd subscription-manager/backend && npm install"]
 
 [phases.build]
-cmds = ["cd subscription-manager/backend && npm run build || true"]
+cmds = ["cd subscription-manager/backend && npx prisma generate"]
 
 [start]
 cmd = "cd subscription-manager/backend && npm start"
