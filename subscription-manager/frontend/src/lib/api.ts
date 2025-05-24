@@ -231,4 +231,4 @@ export const healthCheck = async (): Promise<{ status: string; timestamp: string
 };
 
 // Export utility functions
-export { getToken, setToken, removeToken };
+export { getToken, setToken, removeToken, apiRequest };

@@ -42,7 +42,14 @@ export default function FeedbackModal({ isOpen, onClose, userEmail }: FeedbackMo
 
     try {
       // Send feedback to backend using centralized API
-      const data = await apiRequest<{ message: string; feedback: any }>(
+      const data = await apiRequest<{ 
+        message: string; 
+        feedback: { 
+          id: string; 
+          type: string; 
+          createdAt: string; 
+        } 
+      }>(
         '/feedback',
         {
           method: 'POST',
