@@ -4,7 +4,7 @@ const getApiBaseUrl = () => {
   
   // If no environment variable or it's malformed, use fallback
   if (!envUrl || !envUrl.startsWith('https://')) {
-    return 'https://subscriptiontracker-production.up.railway.app/api';
+    return 'https://subscriptiontracker-production.up.railway.app';
   }
   
   return envUrl;

@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { X, Send, MessageSquare, AlertCircle, CheckCircle } from 'lucide-react';
+import { apiRequest } from '@/lib/api';
 
 interface FeedbackModalProps {
   isOpen: boolean;
@@ -40,30 +41,21 @@ export default function FeedbackModal({ isOpen, onClose, userEmail }: FeedbackMo
     setError('');
 
     try {
-      // Send feedback to backend
-      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001'}/api/feedback`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          // Include auth token if available
-          ...(typeof window !== 'undefined' && localStorage.getItem('accessToken') 
-            ? { 'Authorization': `Bearer ${localStorage.getItem('accessToken')}` }
-            : {})
+      // Send feedback to backend using centralized API
+      const data = await apiRequest<{ message: string; feedback: any }>(
+        '/feedback',
+        {
+          method: 'POST',
+          body: JSON.stringify({
+            type: feedbackType,
+            email,
+            message
+          })
         },
-        body: JSON.stringify({
-          type: feedbackType,
-          email,
-          message
-        })
-      });
+        false // Don't require authentication
+      );
 
-      if (!response.ok) {
-        throw new Error('Failed to submit feedback');
-      }
-
-      const data = await response.json();
       console.log('Feedback submitted:', data);
-
       setSubmitStatus('success');
       
       // Reset form after success
