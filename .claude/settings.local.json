@@ -16,7 +16,10 @@
       "Bash(npm run dev:*)",
       "Bash(cat:*)",
       "Bash(sqlite3:*)",
-      "Bash(rm:*)"
+      "Bash(rm:*)",
+      "Bash(npx prisma migrate dev:*)",
+      "Bash(node:*)",
+      "Bash(npx prisma:*)"
     ],
     "deny": []
   }

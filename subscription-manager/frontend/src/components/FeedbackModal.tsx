@@ -40,18 +40,29 @@ export default function FeedbackModal({ isOpen, onClose, userEmail }: FeedbackMo
     setError('');
 
     try {
-      // In a real app, this would send to a backend endpoint
-      // For now, we'll simulate sending feedback
-      await new Promise(resolve => setTimeout(resolve, 1000));
-      
-      // Log feedback to console (in production, this would go to a backend)
-      console.log('User Feedback:', {
-        type: feedbackType,
-        email,
-        message,
-        timestamp: new Date().toISOString(),
-        userAgent: navigator.userAgent
+      // Send feedback to backend
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001'}/api/feedback`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          // Include auth token if available
+          ...(typeof window !== 'undefined' && localStorage.getItem('accessToken') 
+            ? { 'Authorization': `Bearer ${localStorage.getItem('accessToken')}` }
+            : {})
+        },
+        body: JSON.stringify({
+          type: feedbackType,
+          email,
+          message
+        })
       });
+
+      if (!response.ok) {
+        throw new Error('Failed to submit feedback');
+      }
+
+      const data = await response.json();
+      console.log('Feedback submitted:', data);
 
       setSubmitStatus('success');
       

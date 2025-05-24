@@ -7,6 +7,7 @@ require('dotenv').config();
 // Import routes
 const authRoutes = require('./routes/auth');
 const subscriptionRoutes = require('./routes/subscriptions');
+const feedbackRoutes = require('./routes/feedback');
 
 // Import logging middleware
 const { requestLogger, errorLogger } = require('./middleware/logging');
@@ -165,6 +166,7 @@ app.get('/health/detailed', (req, res) => {
 // API routes
 app.use('/api/auth', authRoutes);
 app.use('/api/subscriptions', subscriptionRoutes);
+app.use('/api/feedback', feedbackRoutes);
 
 // Root endpoint
 app.get('/', (req, res) => {
@@ -198,6 +200,10 @@ app.use('*', (req, res) => {
         update: 'PUT /api/subscriptions/:id',
         delete: 'DELETE /api/subscriptions/:id',
         analytics: 'GET /api/subscriptions/analytics'
+      },
+      feedback: {
+        submit: 'POST /api/feedback',
+        list: 'GET /api/feedback (authenticated)'
       }
     }
   });
