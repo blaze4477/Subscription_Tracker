@@ -55,6 +55,7 @@ const corsOptions = {
       'https://subscription-tracker-git-main-thinesh-balans-projects.vercel.app',
       'https://subscription-tracker-hixfcstx0-thinesh-balans-projects.vercel.app',
       'https://subscription-tracker-6f5qul8pb-thinesh-balans-projects.vercel.app',
+      'https://subscription-tracker-fcyz58142-thinesh-balans-projects.vercel.app',
       // Custom domains
       'https://apps.thineshbalan.com',
       'https://subscription-tracker.thineshbalan.com'
@@ -62,6 +63,16 @@ const corsOptions = {
 
     // Check if origin is allowed
     if (allowedOrigins.includes(origin)) {
+      return callback(null, true);
+    }
+    
+    // Allow all Vercel preview deployments
+    if (origin.includes('.vercel.app') || origin.includes('vercel.app')) {
+      return callback(null, true);
+    }
+    
+    // Allow Railway app domain
+    if (origin.includes('.railway.app')) {
       return callback(null, true);
     }
     
