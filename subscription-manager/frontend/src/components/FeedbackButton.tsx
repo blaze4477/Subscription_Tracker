@@ -45,20 +45,16 @@ export default function FeedbackButton({ userEmail }: FeedbackButtonProps) {
         {/* Main Button */}
         <button
           onClick={() => setIsModalOpen(true)}
-          className="group relative bg-primary-600 hover:bg-primary-700 text-white rounded-full p-4 shadow-lg hover:shadow-xl transition-all duration-200 transform hover:scale-105"
+          className="group relative bg-primary-600 hover:bg-primary-700 text-white rounded-lg px-5 py-3 shadow-lg hover:shadow-xl transition-all duration-200 transform hover:scale-105"
           aria-label="Send feedback"
         >
-          <MessageSquare className="h-6 w-6" />
-          
-          {/* Tooltip */}
-          <span className={`absolute right-full mr-3 top-1/2 -translate-y-1/2 bg-secondary-900 text-white text-sm px-3 py-1.5 rounded-md whitespace-nowrap transition-opacity duration-200 ${
-            isHovered ? 'opacity-100' : 'opacity-0'
-          }`}>
-            Send Feedback
-          </span>
+          <div className="flex items-center space-x-2">
+            <MessageSquare className="h-5 w-5" />
+            <span className="font-medium">Leave a feedback</span>
+          </div>
 
           {/* Pulse animation */}
-          <span className="absolute inset-0 rounded-full bg-primary-600 animate-ping opacity-20"></span>
+          <span className="absolute inset-0 rounded-lg bg-primary-600 animate-ping opacity-20"></span>
         </button>
       </div>
 

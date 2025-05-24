@@ -1,4 +1,5 @@
 import { getToken } from './api';
+import * as gtag from './gtag';
 
 // Ensure API URL is properly formatted
 const getApiBaseUrl = () => {
@@ -217,25 +218,54 @@ export const subscriptionApi = {
 
   // Create new subscription
   createSubscription: async (data: CreateSubscriptionData): Promise<{ message: string; data: Subscription }> => {
-    return subscriptionApiRequest<{ message: string; data: Subscription }>('/subscriptions', {
+    const result = await subscriptionApiRequest<{ message: string; data: Subscription }>('/subscriptions', {
       method: 'POST',
       body: JSON.stringify(data),
     });
+
+    // Track subscription creation
+    gtag.event({
+      action: 'add_subscription',
+      category: 'engagement',
+      label: data.serviceName,
+      value: Math.round(data.cost),
+    });
+
+    return result;
   },
 
   // Update subscription
   updateSubscription: async (id: string, data: UpdateSubscriptionData): Promise<{ message: string; data: Subscription }> => {
-    return subscriptionApiRequest<{ message: string; data: Subscription }>(`/subscriptions/${id}`, {
+    const result = await subscriptionApiRequest<{ message: string; data: Subscription }>(`/subscriptions/${id}`, {
       method: 'PUT',
       body: JSON.stringify(data),
     });
+
+    // Track subscription update
+    gtag.event({
+      action: 'edit_subscription',
+      category: 'engagement',
+      label: data.serviceName || id,
+      value: data.cost ? Math.round(data.cost) : undefined,
+    });
+
+    return result;
   },
 
   // Delete subscription
   deleteSubscription: async (id: string): Promise<{ message: string }> => {
-    return subscriptionApiRequest<{ message: string }>(`/subscriptions/${id}`, {
+    const result = await subscriptionApiRequest<{ message: string }>(`/subscriptions/${id}`, {
       method: 'DELETE',
     });
+
+    // Track subscription deletion
+    gtag.event({
+      action: 'delete_subscription',
+      category: 'engagement',
+      label: id,
+    });
+
+    return result;
   },
 };
 

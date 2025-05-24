@@ -1,5 +1,6 @@
 import { create } from 'zustand';
 import { authApi, type User } from '@/lib/api';
+import * as gtag from '@/lib/gtag';
 
 interface AuthState {
   // State
@@ -38,6 +39,13 @@ export const useAuthStore = create<AuthState>((set, get) => ({
         isLoading: false,
         error: null,
       });
+
+      // Track successful login
+      gtag.event({
+        action: 'login',
+        category: 'engagement',
+        label: 'email',
+      });
     } catch (error) {
       set({
         user: null,
@@ -61,6 +69,13 @@ export const useAuthStore = create<AuthState>((set, get) => ({
         isAuthenticated: true,
         isLoading: false,
         error: null,
+      });
+
+      // Track successful registration
+      gtag.event({
+        action: 'sign_up',
+        category: 'engagement',
+        label: 'email',
       });
     } catch (error) {
       set({

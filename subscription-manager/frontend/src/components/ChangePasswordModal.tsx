@@ -56,14 +56,39 @@ export default function ChangePasswordModal({ isOpen, onClose }: ChangePasswordM
       return false;
     }
 
-    // Basic password strength check
-    const hasUpperCase = /[A-Z]/.test(formData.newPassword);
-    const hasLowerCase = /[a-z]/.test(formData.newPassword);
-    const hasNumber = /\d/.test(formData.newPassword);
-    const hasSpecialChar = /[!@#$%^&*(),.?":{}|<>]/.test(formData.newPassword);
+    // Check for at least one uppercase letter
+    if (!/[A-Z]/.test(formData.newPassword)) {
+      setFormError('Password must contain at least one uppercase letter');
+      return false;
+    }
 
-    if (!(hasUpperCase && hasLowerCase && hasNumber && hasSpecialChar)) {
-      setFormError('Password must contain uppercase, lowercase, number, and special character');
+    // Check for at least one lowercase letter
+    if (!/[a-z]/.test(formData.newPassword)) {
+      setFormError('Password must contain at least one lowercase letter');
+      return false;
+    }
+
+    // Check for at least one number
+    if (!/\d/.test(formData.newPassword)) {
+      setFormError('Password must contain at least one number');
+      return false;
+    }
+
+    // Check for at least one special character
+    if (!/[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/.test(formData.newPassword)) {
+      setFormError('Password must contain at least one special character');
+      return false;
+    }
+
+    // Check for common weak passwords
+    const commonPasswords = [
+      'password', '123456', 'password123', 'admin', 'qwerty',
+      'letmein', 'welcome', 'monkey', '1234567890', 'abc123',
+      'Password123!', 'Admin123!', 'Welcome123!'
+    ];
+    
+    if (commonPasswords.includes(formData.newPassword) || commonPasswords.includes(formData.newPassword.toLowerCase())) {
+      setFormError('Password is too common, please choose a stronger password');
       return false;
     }
 
@@ -200,9 +225,10 @@ export default function ChangePasswordModal({ isOpen, onClose }: ChangePasswordM
                     {showNewPassword ? <EyeOff size={20} /> : <Eye size={20} />}
                   </button>
                 </div>
-                <p className="text-xs text-secondary-500 mt-1">
-                  Must be at least 8 characters with uppercase, lowercase, number, and special character
-                </p>
+                <div className="text-xs text-secondary-500 mt-2">
+                  <p className="font-medium">Password requirements:</p>
+                  <p className="mt-1">Minimum 8 characters with a mix of uppercase, lowercase, numbers, and special characters</p>
+                </div>
               </div>
 
               {/* Confirm New Password */}

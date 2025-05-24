@@ -50,8 +50,8 @@ export default function HomePage() {
       return false;
     }
 
-    if (formData.password.length < 6) {
-      setFormError('Password must be at least 6 characters long');
+    if (formData.password.length < 8) {
+      setFormError('Password must be at least 8 characters long');
       return false;
     }
 
@@ -117,7 +117,7 @@ export default function HomePage() {
                 value={formData.email}
                 onChange={handleInputChange}
                 className="w-full px-3 py-2 border border-gray-300 rounded-md text-gray-900 placeholder-gray-400 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 disabled:bg-gray-50 disabled:text-gray-500"
-                placeholder="Enter your email"
+                placeholder="user@example.com"
                 disabled={isLoading}
               />
             </div>
@@ -146,6 +146,12 @@ export default function HomePage() {
               <label htmlFor="password" className="block text-sm font-medium text-secondary-700 mb-2">
                 Password
               </label>
+              {isRegisterMode && (
+                <div className="text-xs text-secondary-500 mb-2">
+                  <p className="font-medium">Password requirements:</p>
+                  <p className="mt-1">Minimum 8 characters with a mix of uppercase, lowercase, numbers, and special characters</p>
+                </div>
+              )}
               <div className="relative">
                 <input
                   type={showPassword ? 'text' : 'password'}

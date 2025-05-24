@@ -11,7 +11,11 @@
       "Bash(ls:*)",
       "Bash(npm install:*)",
       "Bash(pkill:*)",
-      "Bash(true)"
+      "Bash(true)",
+      "Bash(npm start)",
+      "Bash(npm run dev:*)",
+      "Bash(cat:*)",
+      "Bash(sqlite3:*)"
     ],
     "deny": []
   }

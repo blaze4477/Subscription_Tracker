@@ -4,7 +4,7 @@ const bcrypt = require('bcryptjs');
 const SALT_ROUNDS = 12;
 
 // Password validation constants
-const MIN_PASSWORD_LENGTH = 6;
+const MIN_PASSWORD_LENGTH = 8;
 const MAX_PASSWORD_LENGTH = 128;
 
 /**
@@ -91,29 +91,35 @@ const validatePassword = (password) => {
     errors.push(`Password must not exceed ${MAX_PASSWORD_LENGTH} characters`);
   }
 
-  // Check for at least one letter
-  if (!/[a-zA-Z]/.test(password)) {
-    errors.push('Password must contain at least one letter');
+  // Check for at least one uppercase letter
+  if (!/[A-Z]/.test(password)) {
+    errors.push('Password must contain at least one uppercase letter');
   }
 
-  // Check for at least one number (optional but recommended)
-  // if (!/\d/.test(password)) {
-  //   errors.push('Password must contain at least one number');
-  // }
+  // Check for at least one lowercase letter
+  if (!/[a-z]/.test(password)) {
+    errors.push('Password must contain at least one lowercase letter');
+  }
+
+  // Check for at least one number
+  if (!/\d/.test(password)) {
+    errors.push('Password must contain at least one number');
+  }
+
+  // Check for at least one special character
+  if (!/[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/.test(password)) {
+    errors.push('Password must contain at least one special character');
+  }
 
   // Check for common weak passwords
   const commonPasswords = [
     'password', '123456', 'password123', 'admin', 'qwerty',
-    'letmein', 'welcome', 'monkey', '1234567890', 'abc123'
+    'letmein', 'welcome', 'monkey', '1234567890', 'abc123',
+    'Password123!', 'Admin123!', 'Welcome123!'
   ];
 
-  if (commonPasswords.includes(password.toLowerCase())) {
+  if (commonPasswords.includes(password) || commonPasswords.includes(password.toLowerCase())) {
     errors.push('Password is too common, please choose a stronger password');
-  }
-
-  // Check for repeated characters (more than 3 consecutive)
-  if (/(.)\1{3,}/.test(password)) {
-    errors.push('Password cannot contain more than 3 consecutive identical characters');
   }
 
   return {
