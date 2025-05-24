@@ -1,6 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
 generator client {
   provider = "prisma-client-js"
 }
@@ -11,41 +8,36 @@ datasource db {
 }
 
 model User {
-  id        String   @id @default(cuid())
-  email     String   @unique
-  name      String?
-  password  String
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  // Relationships
-  subscriptions Subscription[]
-  notifications Notification[]
+  id            String         @id @default(cuid())
+  email         String         @unique
+  name          String?
+  password      String
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
   feedback      Feedback[]
+  notifications Notification[]
+  subscriptions Subscription[]
 
   @@map("users")
 }
 
 model Subscription {
-  id              String   @id @default(cuid())
+  id              String        @id @default(cuid())
   userId          String
   serviceName     String
   planType        String
   cost            Float
-  billingCycle    String   // monthly, yearly, weekly, etc.
+  billingCycle    String
   nextBillingDate DateTime
-  status          String   @default("active") // active, inactive, cancelled, expired
-  category        String   // entertainment, productivity, health, etc.
-  paymentMethod   String   // credit_card, paypal, bank_transfer, etc.
-  autoRenewal     Boolean  @default(true)
-  createdAt       DateTime @default(now())
-  updatedAt       DateTime @updatedAt
+  status          String        @default("active")
+  category        String
+  paymentMethod   String
+  autoRenewal     Boolean       @default(true)
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
+  user            User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  transactions    Transaction[]
 
-  // Relationships
-  user         User          @relation(fields: [userId], references: [id], onDelete: Cascade)
-  transactions Transaction[]
-
-  // Indexes
   @@index([userId])
   @@index([status])
   @@index([nextBillingDate])
@@ -54,20 +46,17 @@ model Subscription {
 }
 
 model Transaction {
-  id             String   @id @default(cuid())
+  id             String       @id @default(cuid())
   subscriptionId String
   amount         Float
-  date           DateTime @default(now())
+  date           DateTime     @default(now())
   paymentMethod  String
-  status         String   @default("pending") // pending, completed, failed, refunded
+  status         String       @default("pending")
   receiptUrl     String?
-  createdAt      DateTime @default(now())
-  updatedAt      DateTime @updatedAt
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @updatedAt
+  subscription   Subscription @relation(fields: [subscriptionId], references: [id], onDelete: Cascade)
 
-  // Relationships
-  subscription Subscription @relation(fields: [subscriptionId], references: [id], onDelete: Cascade)
-
-  // Indexes
   @@index([subscriptionId])
   @@index([status])
   @@index([date])
@@ -77,18 +66,15 @@ model Transaction {
 model Notification {
   id         String   @id @default(cuid())
   userId     String
-  type       String   // reminder, alert, info, warning
+  type       String
   title      String
   message    String
-  priority   String   @default("medium") // low, medium, high, urgent
+  priority   String   @default("medium")
   readStatus Boolean  @default(false)
   createdAt  DateTime @default(now())
   updatedAt  DateTime @updatedAt
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 
-  // Relationships
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
-
-  // Indexes
   @@index([userId])
   @@index([type])
   @@index([priority])
@@ -99,18 +85,15 @@ model Notification {
 
 model Feedback {
   id        String   @id @default(cuid())
-  userId    String?  // Optional, for anonymous feedback
-  email     String   // Always required for contact
-  type      String   // bug, feature, general
+  userId    String?
+  email     String
+  type      String
   message   String
-  status    String   @default("new") // new, read, resolved
+  status    String   @default("new")
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+  user      User?    @relation(fields: [userId], references: [id], onDelete: Cascade)
 
-  // Relationships
-  user User? @relation(fields: [userId], references: [id], onDelete: Cascade)
-
-  // Indexes
   @@index([userId])
   @@index([type])
   @@index([status])

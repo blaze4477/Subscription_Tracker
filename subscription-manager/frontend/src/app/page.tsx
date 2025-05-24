@@ -118,6 +118,7 @@ export default function HomePage() {
                 onChange={handleInputChange}
                 className="w-full px-3 py-2 border border-gray-300 rounded-md text-gray-900 placeholder-gray-400 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 disabled:bg-gray-50 disabled:text-gray-500"
                 placeholder="user@example.com"
+                autoComplete="username"
                 disabled={isLoading}
               />
             </div>
@@ -161,6 +162,7 @@ export default function HomePage() {
                   onChange={handleInputChange}
                   className="w-full px-3 py-2 pr-10 border border-gray-300 rounded-md text-gray-900 placeholder-gray-400 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 disabled:bg-gray-50 disabled:text-gray-500"
                   placeholder="Enter your password"
+                  autoComplete={isRegisterMode ? 'new-password' : 'current-password'}
                   disabled={isLoading}
                 />
                 <button

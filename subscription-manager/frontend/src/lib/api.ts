@@ -2,12 +2,18 @@
 const getApiBaseUrl = () => {
   const envUrl = process.env.NEXT_PUBLIC_API_URL;
   
-  // If no environment variable or it's malformed, use fallback
-  if (!envUrl || !envUrl.startsWith('https://')) {
+  // If no environment variable, use production fallback
+  if (!envUrl) {
     return 'https://subscriptiontracker-production.up.railway.app';
   }
   
-  return envUrl;
+  // Allow localhost URLs for development
+  if (envUrl.startsWith('http://localhost:') || envUrl.startsWith('https://')) {
+    return envUrl;
+  }
+  
+  // Fallback to production
+  return 'https://subscriptiontracker-production.up.railway.app';
 };
 
 const API_BASE_URL = getApiBaseUrl();
